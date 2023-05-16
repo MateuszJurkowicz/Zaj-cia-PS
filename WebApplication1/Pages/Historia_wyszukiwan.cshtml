@@ -1,0 +1,89 @@
+﻿@page
+@model WebApplication1.Pages.Historia_wyszukiwanModel
+@{
+    ViewData["Title"] = "Historia_wyszukiwan";
+}
+
+<h1>Historia wyszukiwań</h1>
+
+<form asp-page="./Historia_wyszukiwan" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Przeszukaj listę:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Historia_wyszukiwan">Back to full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Historia_wyszukiwan" asp-route-sortOrder="@Model.IDSort">
+                    @Html.DisplayNameFor(model => model.People[0].Id)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Historia_wyszukiwan" asp-route-sortOrder="@Model.NameSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.People[0].FirstName)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Historia_wyszukiwan" asp-route-sortOrder="@Model.YearSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.People[0].YearOfBirth)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Historia_wyszukiwan" asp-route-sortOrder="@Model.ResultSort">
+                    @Html.DisplayNameFor(model => model.People[0].Result)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Historia_wyszukiwan" asp-route-sortOrder="@Model.DateSort">
+                    @Html.DisplayNameFor(model => model.People[0].ActualTime)
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.People)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.FirstName</td>
+                <td>@item.YearOfBirth</td>
+                <td>@item.Result</td>
+                <td>@item.ActualTime.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                <td>
+                    <a asp-page="./People/Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./People/Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./People/Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.People.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.People.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Historia_wyszukiwan"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.People.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Historia_wyszukiwan"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.People.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
