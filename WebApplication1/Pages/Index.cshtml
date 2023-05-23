@@ -46,7 +46,7 @@
 <h1>Lata przestępne</h1>
 
 <form method="post">
-    
+
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div>
         <label asp-for="Person.FirstName" class="control-label">Imię:</label>
@@ -65,7 +65,26 @@
             Dane zostały pomyślnie zapisane.
         </div>
     }
+    <div class="text-center">
+        @if (Model.Records != null)
+        {
+            <p>
+                Liczba osób urodzonych w roku przestępnym: @Model.Records.Count(). Są to:
+            </p>
+            @foreach (var item in Model.Records)
+            {
+                <p>@item.FirstName @item.YearOfBirth</p>
+            }
+        }
+        else
+        {
+            <p>Brak dostępnych rekordów.</p>
+        }
+    </div>
+
 </form>
+
+
 
 
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using WebApplication1.Interfaces;
 using WebApplication1.Models;
 
 namespace WebApplication1.Pages
@@ -9,22 +10,21 @@ namespace WebApplication1.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly PeopleContext _context;
+        private readonly ILeapYearInterface _leapYearInterface;
+        public IQueryable<Person> Records { get; set; }
         [BindProperty]
         public Person Person { get; set; }
-        public IList<Person> People { get; set; }
         public bool IsSaved { get; set; }
-        public IndexModel(ILogger<IndexModel> logger, PeopleContext context)
+        public IndexModel(ILogger<IndexModel> logger, ILeapYearInterface leapYearInterface)
         {
             _logger = logger;
-            _context = context;
+            _leapYearInterface = leapYearInterface;
         }
-
-
         public void OnGet()
         {
-        }
+            Records = _leapYearInterface.GetData();
 
+        }
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
@@ -43,8 +43,7 @@ namespace WebApplication1.Pages
 
             IsSaved = true;
             Person.ActualTime = DateTime.Now;
-            _context.Person.Add(Person);
-            _context.SaveChanges();
+            _leapYearInterface.AddData(Person);
             return Page();
         }
     }

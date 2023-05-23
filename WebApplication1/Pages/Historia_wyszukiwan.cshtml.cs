@@ -3,19 +3,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApplication1.Data;
+using WebApplication1.Interfaces;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Pages
 {
     public class Historia_wyszukiwanModel : PageModel
     {
-        private readonly PeopleContext _context;
+        private readonly ILeapYearInterface _leapYearInterface;
         private readonly IConfiguration Configuration;
-        //public IList<Person> People { get; set; }
 
-        public Historia_wyszukiwanModel(PeopleContext context, IConfiguration configuration)
+        public Historia_wyszukiwanModel(ILeapYearInterface leapYearInterface, IConfiguration configuration)
         {
-            _context = context;
+            _leapYearInterface = leapYearInterface;
             Configuration = configuration;
 
         }
@@ -51,7 +52,7 @@ namespace WebApplication1.Pages
 
             CurrentFilter = searchString;
 
-            IQueryable<Person> PeopleIQ = from s in _context.Person select s;
+            IQueryable<Person> PeopleIQ = from s in _leapYearInterface.GetData() select s;
 
             if (!String.IsNullOrEmpty(searchString))
             {

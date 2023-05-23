@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using WebApplication1.Interfaces;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
@@ -21,6 +23,9 @@ namespace WebApplication1
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
+
+            builder.Services.AddTransient<ILeapYearInterface, LeapYearInterface>();
+
 
             var app = builder.Build();
 
